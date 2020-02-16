@@ -29,6 +29,12 @@ def main():
             computationTimes.append(ct)
             prevTime = startTime
             inodes.append(fa.split("{")[1][:-7])
+    postprocFile = open("postProc.txt","w+")
+    for index in range(len(inodes)):
+        if(index!=(len(inodes)-1)):
+            postprocFile.write(inodes[index]+" "+computationTimes[index+1]+"\r\n")
+        else:
+            postprocFile.write(inodes[index]+"\r\n")
 
 if __name__=='__main__':
     main()
