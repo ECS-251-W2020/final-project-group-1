@@ -24,4 +24,4 @@
       Anusha:
 
 [Trello Board]: https://trello.com/b/NnINPmtG/ecs-251-group-1-board
-[Tutorial]: https://medium.com/anubhav-shrimal/adding-a-hello-world-system-call-to-linux-kernel-dad32875872
+[Tutorial]:  https://medium.com/anubhav-shrimal/adding-a-hello-world-system-call-to-linux-kernel-dad32875872
