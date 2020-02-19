@@ -1,6 +1,6 @@
 ## Sam's comments:
-       - implement "something" in the kernel space.
-       -Have a  [Trello Board]!
+       implement "something" in the kernel space.
+       Have a  [Trello Board](https://trello.com/b/NnINPmtG/ecs-251-group-1-board).
 
 ## How did the last week go?
 
@@ -22,5 +22,3 @@
       Dhruvatara: 
       
       Anusha:
-
-[Trello Board]: https://trello.com/b/NnINPmtG/ecs-251-group-1-board
