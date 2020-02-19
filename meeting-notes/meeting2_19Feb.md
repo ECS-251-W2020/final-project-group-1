@@ -12,7 +12,8 @@
               wrote a shell script to run strace on gcc and call the cleaner script.
               wrote cleaner script to parse strace data to get relevant information.
        
-       Anusha: Implementating a system-wide open-file-table, associated file pointers and per-file information. 
+       Anusha: 
+              started implementing a system-wide file table data structure which is used for storing parsed information from strace.
        
 ## What's next?
 
@@ -23,7 +24,7 @@
        
       Dhruvatara: implement a cache manager module that adds and removes blocks in the cache based on the input coming from algorithm module
       
-      Anusha:
+      Anusha: implement the LRU algorithm which is used in the Algorithm module.
 
 [Trello Board](https://trello.com/b/NnINPmtG/ecs-251-group-1-board)
 
