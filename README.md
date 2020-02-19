@@ -15,7 +15,7 @@ February 11 - February 18
        
        Dhruvatara: 
        
-       Anusha: 
+       Anusha: Implementating a system-wide open-file-table, associated file pointers and per-file information. 
        
 February 19 - February 26
 
