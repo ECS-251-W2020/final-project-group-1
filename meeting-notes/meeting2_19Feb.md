@@ -6,7 +6,7 @@
 
        Jayneel: 
               started with a UI fuzzer, realised strace does the work on each individual command.
-              worked on implementing a basic system call- "Hello! username", following a [Tutorial] on a Ubuntu System
+              worked on implementing a basic system call- "Hello! username", following a (tutorial)[https://medium.com/anubhav-shrimal/adding-a-hello-world-system-call-to-linux-kernel-dad32875872] on a Ubuntu System
        
        Dhruvatara: 
        
