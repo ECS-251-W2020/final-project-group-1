@@ -8,13 +8,15 @@ Group member\: Anusha Bangi, Dhruvatara Bhogishetty, Jayneel Vora
 
 ## File
 - Doc \: meeting notes, archives and drafts
+
 February 11 - February 18
 
-       Jayneel\: 
+       Jayneel: 
        
-       Dhruvatara\: 
+       Dhruvatara: 
        
        Anusha: 
+       
 February 19 - February 26
 
       Jayneel:
