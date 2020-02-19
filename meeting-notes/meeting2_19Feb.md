@@ -13,7 +13,8 @@
               wrote cleaner script to parse strace data to get relevant information.
        
        Anusha: 
-              started implementing a system-wide file table data structure which is used for storing parsed information from strace.
+              wrote a data structure class which can be used to store the parsed values of strace and can be used as a system-wide, open-file-table , associated file pointers and per-file prefetching information. 
+            
        
 ## What's next?
 
