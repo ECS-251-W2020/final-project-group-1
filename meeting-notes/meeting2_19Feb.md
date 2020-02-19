@@ -15,9 +15,9 @@ How did the last week go?
 what's next?
 
       Jayneel:
-       build accusim on a sys.
-       understand how the manage module works in accusim.
-       identify how the algorithms will run and send an input to the Manager Module about the block that needs to be added and removed.
+              build accusim on a sys.
+              understand how the manage module works in accusim.
+              identify how the algorithms will run and send an input to the Manager Module about the block that needs to be added and removed.
        
       Dhruvatara: 
       
