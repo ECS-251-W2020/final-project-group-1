@@ -1,8 +1,8 @@
-#Sam's comments:
+# Sam's comments:
        - implement "something" in the kernel space.
        -Have a  [Trello Board]!
 
-#How did the last week go?
+# How did the last week go?
 
        Jayneel: 
               started with a UI fuzzer, realised strace does the work on each individual command.
@@ -12,7 +12,7 @@
        
        Anusha: Implementating a system-wide open-file-table, associated file pointers and per-file information. 
        
-#what's next?
+# what's next?
 
       Jayneel:
               build accusim on a sys.
