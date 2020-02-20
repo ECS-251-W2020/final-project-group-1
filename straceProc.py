@@ -1,6 +1,9 @@
 import sys
 import os
+import dataStore
+
 def main():
+    
     filename = sys.argv[1]
     if not os.path.isfile(filename):
        print("File path does not exist. Exiting...")
@@ -36,5 +39,7 @@ def main():
         else:
             postprocFile.write(inodes[index]+"\r\n")
 
+    #Create dataStore object
+    dataObject = dataStore(fileAccesses, inodes, computationTimes)
 if __name__=='__main__':
     main()
