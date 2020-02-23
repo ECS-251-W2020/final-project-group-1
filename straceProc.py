@@ -3,7 +3,7 @@ import os
 import dataStore
 
 def main():
-    
+
     filename = sys.argv[1]
     if not os.path.isfile(filename):
        print("File path does not exist. Exiting...")
@@ -12,6 +12,7 @@ def main():
     ## TODO: find out how strace gets first block being accessed and number of blocks. change fileAccesses list accordingly to store this info
     fileAccesses = []
     inodes = []
+    addresses = []
     computationTimes = []
     with open(filename) as fp:
         for line in fp:
@@ -31,15 +32,17 @@ def main():
             #print(ct)
             computationTimes.append(ct)
             prevTime = startTime
-            inodes.append(fa.split("{")[1][:-7])
+            inodePlusAddr = fa.split("{")
+            inodes.append(inodePlusAddr[1].split("}")[0])
+            addresses.append(inodePlusAddr[1].split("}")[1][6:-6])
     postprocFile = open("postProc.txt","w+")
     for index in range(len(inodes)):
         if(index!=(len(inodes)-1)):
-            postprocFile.write(inodes[index]+" "+computationTimes[index+1]+"\r\n")
+            postprocFile.write(inodes[index]+" "+computationTimes[index+1]+" "+addresses[index]+"\r\n")
         else:
-            postprocFile.write(inodes[index]+"\r\n")
+            postprocFile.write(inodes[index]+" "+addresses[index]+"\r\n")
 
     #Create dataStore object
-    dataObject = dataStore(fileAccesses, inodes, computationTimes)
+    #dataObject = dataStore(fileAccesses, inodes, computationTimes)
 if __name__=='__main__':
     main()
