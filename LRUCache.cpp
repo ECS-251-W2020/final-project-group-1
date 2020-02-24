@@ -1,16 +1,18 @@
 #include <iostream>
 #include <map>
 using namespace std;
-class Node {
+class DLinkedNode {
 	public:
-	int key, value;
-	Node *prev, *next;
-	Node(int k, int v): key(k), value(v), prev(NULL), next(NULL) {}
+	int key;
+    int value;
+	DLinkedNode *prev, *next;
+	DLinkedNode(int k, int v): key(k), value(v), prev(NULL), next(NULL) {}
 };
 
 class DLList {
-	Node *start, *end;
+	DLinkedNode *start, *end;
 	
+    //check if cache has no page in it
 	bool isEmpty() {
 		return end == NULL;
 	}
@@ -18,24 +20,29 @@ class DLList {
 	public:
 	DLList(): start(NULL), end(NULL) {}
 	
-	Node* add_page_to_head(int key, int value) {
-		Node *page = new Node(key, value);
-		if(!start && !end) {
-			start = end = page;
-		}
-		else {
-			page->next = start;
+	DLinkedNode* add_current_page_to_start(int key, int value) {
+		DLinkedNode *page = new DLinkedNode(key, value);
+       
+		if(start && end) {
+             //add page to the start and point the previous first page to the current one and vice versa
+            page->next = start;
 			start->prev = page;
 			start = page;
+		}
+		else {
+             //if the page being added is the first page and cache is empty
+			start = end = page;
 		}
 		return page;
 	}
 
-	void move_page_to_head(Node *page) {
+	void push_page_to_start(DLinkedNode *page) {
 		if(page==start) {
+            //if there is no page in cache
 			return;
 		}
 		if(page == end) {
+            //if there is only one page in cache
 			end = end->prev;
 			end->next = NULL;
 		}
@@ -51,77 +58,82 @@ class DLList {
 	}
 
 	void remove_rear_page() {
+        //check if the cache is empty
 		if(isEmpty()) {
 			return;
 		}
 		if(start == end) {
+            //if there is only one page in the cache, free the page
 			delete end;
 			start = end = NULL;
 		}
 		else {
-			Node *temp = end;
+			DLinkedNode *temp = end;
 			end = end->prev;
 			end->next = NULL;
 			delete temp;
 		}
 	}
-	Node* get_rear_page() {
+	DLinkedNode* get_rear_page() {
 		return end;
 	}
 	
 };
 
 class LRUCache{
-	int capacity, size;
+	int capacity, cacheSize;
 	DLList *pageList;
-	map<int, Node*> pageMap;
+	map<int, DLinkedNode*> cacheMap;
 
 	public:
     LRUCache(int capacity) {
     	this->capacity = capacity;
-    	size = 0;
+    	cacheSize = 0;
         pageList = new DLList();
-        pageMap = map<int, Node*>();
+        cacheMap = map<int, DLinkedNode*>();
     }
     
+    //code to get the value of the key that exists in the cache
     int get(int key) {
-        if(pageMap.find(key)==pageMap.end()) {
+        if(cacheMap.find(key)==cacheMap.end()) {
+            //if key is not present in the memory
         	return -1;
         }
-        int val = pageMap[key]->value;
+        int val = cacheMap[key]->value;
 
-        // move the page to front
-        pageList->move_page_to_head(pageMap[key]);
+        // This code pushed the page to the head or the start
+        pageList->push_page_to_start(cacheMap[key]);
         return val;
     }
     
     void put(int key, int value) {
-    	if(pageMap.find(key)!=pageMap.end()) {
-    		// if key already present, update value and move page to head
-    		pageMap[key]->value = value;
-    		pageList->move_page_to_head(pageMap[key]);
+        // If cache already has the key, then the given value is updated and page is moved to the start
+    	if(cacheMap.find(key)!=cacheMap.end()) {
+    		cacheMap[key]->value = value;
+    		pageList->push_page_to_start(cacheMap[key]);
     		return;
     	}
 
-        if(size == capacity) {
-        	// remove end page
+        if(cacheSize == capacity) {
+        	// if the cache is full then remove end page
         	int k = pageList->get_rear_page()->key;
-        	pageMap.erase(k);
+        	cacheMap.erase(k);
         	pageList->remove_rear_page();
-        	size--;
+        	cacheSize--;
         }
 
-        // add new page to head to Queue
-        Node *page = pageList->add_page_to_head(key, value);
-        size++;
-        pageMap[key] = page;
+        // insert a new page to the start of the queue if cache is not full
+        DLinkedNode *page = pageList->add_current_page_to_start(key, value);
+        cacheSize++;
+        cacheMap[key] = page;
     }
 
     ~LRUCache() {
-    	map<int, Node*>::iterator i1;
-    	for(i1=pageMap.begin();i1!=pageMap.end();i1++) {
-    		delete i1->second;
+    	map<int, DLinkedNode*>::iterator iNew;
+    	for(iNew=cacheMap.begin();iNew!=cacheMap.end();iNew++) {
+    		delete iNew->second;
     	}
     	delete pageList;
     }
 };
+
