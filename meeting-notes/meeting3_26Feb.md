@@ -32,5 +32,9 @@
 ## Issues we faced?
       Dhruvatara:
               how to remove a specific block from page cache
+      Jayneel: 
+              SYSTEM CRASHED! three times.
+              Accusim download still not provided; only way out is to base it totally on the paper.
+              
 
 [Trello Board](https://trello.com/b/NnINPmtG/ecs-251-group-1-board)
