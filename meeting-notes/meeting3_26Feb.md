@@ -22,6 +22,8 @@
 ## What's next?
 
       Jayneel:
+              finishing the kernel based LRU algorithm module,
+              writing code for ARC.
 
       Dhruvatara:
               finish module to remove specific block from page cache
