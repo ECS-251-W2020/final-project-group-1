@@ -5,7 +5,11 @@
 ## How did the last week go?
 
        Jayneel:
-
+              Building from a system call to a kernel module for the previous system call.
+              Accusim Download still not accepted unable to look at the simulator for a view into the functionality of the module.
+              Left to run the LRU from the kernel, building a kernel module to call LRU code.
+              
+              
 
        Dhruvatara:
               made changes to strace source code to get data required by our system.
