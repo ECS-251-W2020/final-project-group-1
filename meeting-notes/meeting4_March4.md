@@ -9,11 +9,11 @@
               
               
 
-       Dhruvatara:
+       Dhruvatara: 
              
 
 
-       Anusha: 
+       Anusha: Read on Kernel hacking and watched some tutorials regarding NBLoader and Page Cache Data Structures. Updated the Global data structure and worked on testing this with various values of inodes, addresses and computation times.
 
 ## What's next?
 
@@ -23,7 +23,7 @@
       Dhruvatara:
              
 
-      Anusha:implement the kernel buffer prefetching algorithm.
+      Anusha: Complete the integration of LRU algorithm with algorithm module.
 
 ## Issues we faced?
       ALL: PANIC!
