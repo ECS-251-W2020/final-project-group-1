@@ -13,7 +13,7 @@
              
 
 
-       Anusha: Read on Kernel hacking and watched some tutorials regarding NBLoader and Page Cache Data Structures. Updated the Global data structure and worked on testing this with various values of inodes, addresses and computation times.
+       Anusha: read on Kernel hacking and watched some tutorials regarding NBLoader and Page Cache Data Structures. Updated the Global data structure and worked on testing this with various values of inodes, addresses and computation times.
 
 ## What's next?
 
