@@ -1,0 +1,11 @@
+*.txt
+*.out
+*.out
+*.cmd
+*.ko
+*.o
+*.order
+*.so
+Makefile
+.tmp_versions
+__pycache__
