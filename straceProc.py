@@ -33,7 +33,7 @@ def main():
             computationTimes.append(ct)
             prevTime = startTime
             inodePlusAddr = fa.split("{")
-            inodes.append(inodePlusAddr[1].split("}")[0])
+            inodes.append("{"+inodePlusAddr[1].split("}")[0]+"}")
             addresses.append(inodePlusAddr[1].split("}")[1][6:-6])
     postprocFile = open("postProc.txt","w+")
     for index in range(len(inodes)):
