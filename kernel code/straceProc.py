@@ -43,6 +43,6 @@ def main():
             postprocFile.write(inodes[index]+" "+addresses[index]+"\r\n")
 
     #Create dataStore object
-    #dataObject = dataStore(fileAccesses, inodes, computationTimes)
+    #dataObject = dataStore(fileAccesses, inodes, adddresses, computationTimes)
 if __name__=='__main__':
     main()
