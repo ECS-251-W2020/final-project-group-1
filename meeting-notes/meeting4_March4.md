@@ -23,7 +23,7 @@
       Dhruvatara:
              
 
-      Anusha: Complete the integration of LRU algorithm with algorithm module.
+      Anusha: complete the integration of LRU algorithm with algorithm module after understanding NBLoader.
 
 ## Issues we faced?
       ALL: PANIC!
