@@ -1,9 +1,0 @@
-*.txt
-*.out
-*.cmd
-*.ko
-*.o
-*.order
-Makefile
-.tmp_versions
-__pycache__
