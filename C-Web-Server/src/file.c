@@ -5,7 +5,7 @@
 
 /**
  * Loads a file into memory and returns a pointer to the data.
- * 
+ *
  * Buffer is not NUL-terminated.
  */
 struct file_data *file_load(char *filename)
@@ -16,11 +16,6 @@ struct file_data *file_load(char *filename)
 
     // Get the file size
     if (stat(filename, &buf) == -1) {
-        return NULL;
-    }
-
-    // Make sure it's a regular file
-    if (!(buf.st_mode & S_IFREG)) {
         return NULL;
     }
 

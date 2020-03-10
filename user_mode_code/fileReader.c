@@ -1,11 +1,14 @@
 #define _GNU_SOURCE
 #include <dlfcn.h>
 #include <stdio.h>
-typedef char* (*orig_fgets)(char* str, int num, FILE *stream);
-char* fgets(char* str,int num,FILE *stream) {
-  //TODO:
-  orig_fgets o_fgets;
-  o_fgets = (orig_fgets)dlsym(RTLD_NEXT,"fgets");
-  printf("This is where we will implement prefetching and cache replacement logic");
-  return o_fgets(str,num,stream);
+#define PAGE_SIZE 20
+typedef size_t (*orig_fread)(void *ptr, size_t size, size_t nmemb, FILE *stream);
+size_t fread(void *ptr, size_t size, size_t nmemb, FILE *stream) {
+  float divi = (size*nmemb)/PAGE_SIZE;
+  int t = (int)divi;
+  int no_of_pages = t + (divi-t)*PAGE_SIZE;
+  char* page_content[21];
+  while(no_of_pages > 0) {
+    
+  }
 }
