@@ -1,18 +1,18 @@
 /**
  * webserver.c -- A webserver written in C
- * 
+ *
  * Test with curl (if you don't have it, install it):
- * 
+ *
  *    curl -D - http://localhost:3490/
  *    curl -D - http://localhost:3490/d20
  *    curl -D - http://localhost:3490/date
- * 
+ *
  * You can also test the above URLs in your browser! They should work!
- * 
+ *
  * Posting Data:
- * 
+ *
  *    curl -D - -X POST -H 'Content-Type: text/plain' -d 'Hello, sample data!' http://localhost:3490/save
- * 
+ *
  * (Posting data is harder to test from a browser.)
  */
 
@@ -32,6 +32,7 @@
 #include "net.h"
 #include "file.h"
 #include "mime.h"
+#include "setup.h"
 #include "cache.h"
 
 #define PORT "3490"  // the port users will be connecting to
@@ -45,9 +46,10 @@
  * header:       "HTTP/1.1 404 NOT FOUND" or "HTTP/1.1 200 OK", etc.
  * content_type: "text/plain", etc.
  * body:         the data to send.
- * 
+ *
  * Return the value from the send() function.
  */
+struct file_pages *paper1 = NULL;
 int send_response(int fd, char *header, char *content_type, void *body, int content_length)
 {
     const int max_response_size = 262144;
@@ -55,7 +57,7 @@ int send_response(int fd, char *header, char *content_type, void *body, int cont
 
     // Build HTTP response and store it in response
 
-    
+
     int response_length = sprintf(response,
                                   "%s\n"
                                   "Content-Type: %s\n"
@@ -64,7 +66,7 @@ int send_response(int fd, char *header, char *content_type, void *body, int cont
                                   "\n",
                                   header, content_type, content_length, body);
 
-    
+
     // Send it all!
     int rv = send(fd, response, response_length, 0);
     if (rv < 0)
@@ -82,27 +84,12 @@ int send_response(int fd, char *header, char *content_type, void *body, int cont
 
 
 /**
- * Send a /d20 endpoint response
- */
-void get_d20(int fd)
-{
-    // Generate a random number between 1 and 20 inclusive
-    fprintf(stdout,"Generating random  number ...");
-    int random_number = rand() % 20 + 1;
-    char number_string[255];
-    int string_length;
-
-    string_length = sprintf(number_string, "%d", random_number);
-    send_response(fd, "HTTP/1.1 OK", "text/plain", number_string, string_length);
-}
-
-/**
  * Send a 404 response
  */
 void resp_404(int fd)
 {
     char filepath[4096];
-    struct file_data *filedata; 
+    struct file_data *filedata;
     char *mime_type;
 
     // Fetch the 404.html file
@@ -122,32 +109,7 @@ void resp_404(int fd)
     file_free(filedata);
 }
 
-/**
- * Send a cat response
- */
-void get_cat(int fd)
-{
-    char filepath[4096];
-    struct file_data *filedata;
-    char *mime_type;
 
-    // Fetch the cat.jpeg file
-    snprintf(filepath, sizeof filepath, "%s/cat.jpg", SERVER_ROOT);
-    filedata = file_load(filepath);
-
-    if (filedata == NULL)
-    {
-        // TODO: make this non-fatal
-        fprintf(stderr, "cannot find cat file\n");
-        exit(3);
-    }
-
-    mime_type = mime_type_get(filepath);
-
-    send_response(fd, "HTTP/1.1 200 FOUND", mime_type, filedata->data, filedata->size);
-
-    file_free(filedata);
-}
 
 /**
  * Read and return a file from disk or cache
@@ -155,11 +117,12 @@ void get_cat(int fd)
 void get_file(int fd, struct cache *cache, char *request_path)
 {
     char filepath[4096];
-    struct file_data *filedata; 
+    struct file_data *filedata;
     char *mime_type;
 
     snprintf(filepath, sizeof filepath, "%s%s", SERVER_ROOT, request_path);
-    filedata = file_load(filepath);
+    if(filepath == "serverroot/InterAxis.pdf")
+      filedata = file_load(paper1);
 
     printf("%s\n", filepath);
 
@@ -177,7 +140,7 @@ void get_file(int fd, struct cache *cache, char *request_path)
 
 /**
  * Search for the end of the HTTP header
- * 
+ *
  * "Newlines" in HTTP can be \r\n (carriage return followed by newline) or \n
  * (newline) or \r (carriage return).
  */
@@ -209,9 +172,9 @@ void handle_http_request(int fd, struct cache *cache)
     // IMPLEMENT ME! //
     ///////////////////
 
-    // Read the first two components of the first line of the request 
-    
-    
+    // Read the first two components of the first line of the request
+
+
     char method[200], path[8192];
 
     //parse the path
@@ -224,12 +187,9 @@ void handle_http_request(int fd, struct cache *cache)
         strncpy(path,tempPath, 8192);
 
     fprintf(stdout,"parsed into ", path);*/
-    if (strcmp("/d20", path) == 0) {
-        get_d20(fd);
-    } 
-    else if (strcmp("GET", method) == 0) {
+    if (strcmp("GET", method) == 0) {
         get_file(fd, cache, path);
-    } 
+    }
     else if (strcmp("POST", method) == 0) {
 
         // (Stretch) If POST, handle the post request
@@ -250,6 +210,7 @@ int main(void)
     int newfd;  // listen on sock_fd, new connection on newfd
     struct sockaddr_storage their_addr; // connector's address information
     char s[INET6_ADDRSTRLEN];
+    *paper1 = setup("serverroot/InterAxis.pdf");
 
     // random randomizing seeding
     srand(time(NULL));
@@ -269,7 +230,7 @@ int main(void)
     // This is the main loop that accepts incoming connections and
     // responds to the request. The main parent process
     // then goes back to waiting for new connections.
-    
+
     while(1) {
         socklen_t sin_size = sizeof their_addr;
 
@@ -286,13 +247,13 @@ int main(void)
             get_in_addr((struct sockaddr *)&their_addr),
             s, sizeof s);
         printf("server: got connection from %s\n", s);
-        
+
         // newfd is a new socket descriptor for the new connection.
         // listenfd is still listening for new connections.
         // Test for send_response();
         //resp_404(newfd);
         // ------------------------
-        
+
         handle_http_request(newfd, cache);
 
         close(newfd);
@@ -302,4 +263,3 @@ int main(void)
 
     return 0;
 }
-

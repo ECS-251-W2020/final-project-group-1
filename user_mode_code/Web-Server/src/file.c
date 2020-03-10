@@ -2,30 +2,18 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include "file.h"
-
+#include "setup.h"
 /**
  * Loads a file into memory and returns a pointer to the data.
  *
  * Buffer is not NUL-terminated.
  */
-struct file_data *file_load(char *filename)
+struct file_data *file_load(struct file_pages *fpgs)
 {
     char *buffer, *p;
     struct stat buf;
-    int bytes_read, bytes_remaining, total_bytes = 0;
-
-    // Get the file size
-    if (stat(filename, &buf) == -1) {
-        return NULL;
-    }
-
-    // Open the file for reading
-    FILE *fp = fopen(filename, "rb");
-
-    if (fp == NULL) {
-        return NULL;
-    }
-
+    int pages_read, pages_remaining, total_bytes = 0;
+    int total_pages = fpgs->no_of_pages;
     // Allocate that many bytes
     bytes_remaining = buf.st_size;
     p = buffer = malloc(bytes_remaining);
