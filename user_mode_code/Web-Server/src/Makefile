@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-Wall -Wextra
 
-OBJS=server.o net.o file.o mime.o cache.o hashtable.o llist.o
+OBJS=server.o net.o file.o mime.o cache.o hashtable.o llist.o setup.o page_cache.o freadd.o
 
 all: server
 
@@ -21,6 +21,12 @@ cache.o: cache.c cache.h
 hashtable.o: hashtable.c hashtable.h
 
 llist.o: llist.c llist.h
+
+setup.o: setup.c setup.h
+
+freadd.o: freadd.c freadd.h
+
+page_cache.o: page_cache.c page_cache.h
 
 clean:
 	rm -f $(OBJS)

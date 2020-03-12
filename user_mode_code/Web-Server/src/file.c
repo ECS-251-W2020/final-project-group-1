@@ -1,8 +1,6 @@
-#include <stdio.h>
 #include <stdlib.h>
-#include <sys/stat.h>
-#include "file.h"
 #include "setup.h"
+#include "file.h"
 /**
  * Loads a file into memory and returns a pointer to the data.
  *
@@ -10,40 +8,32 @@
  */
 struct file_data *file_load(struct file_pages *fpgs)
 {
-    char *buffer, *p;
-    struct stat buf;
-    int pages_read, pages_remaining, total_bytes = 0;
-    int total_pages = fpgs->no_of_pages;
-    // Allocate that many bytes
-    bytes_remaining = buf.st_size;
-    p = buffer = malloc(bytes_remaining);
+    //char *buffer, *p;
 
-    if (buffer == NULL) {
+    // Allocate that many bytes
+    int total_pages = fpgs->no_of_pages;
+    int page_size = fpgs->page_size;
+    //FILE *fp = fpgs->fp;
+    //p = buffer = malloc(total_pages*page_size);
+    char p[total_pages*page_size];
+
+    if (p == NULL) {
         return NULL;
     }
-
+    //printf("%d\n",total_pages*page_size);
     // Read in the entire file
-    while (bytes_read = fread(p, 1, bytes_remaining, fp), bytes_read != 0 && bytes_remaining > 0) {
-        if (bytes_read == -1) {
-            free(buffer);
-            return NULL;
-        }
-
-        bytes_remaining -= bytes_read;
-        p += bytes_read;
-        total_bytes += bytes_read;
-    }
+    freadd(p,fpgs);
 
     // Allocate the file data struct
     struct file_data *filedata = malloc(sizeof *filedata);
 
     if (filedata == NULL) {
-        free(buffer);
+        free(p);
         return NULL;
     }
 
-    filedata->data = buffer;
-    filedata->size = total_bytes;
+    filedata->data = p;
+    filedata->size = total_pages*page_size;
 
     return filedata;
 }

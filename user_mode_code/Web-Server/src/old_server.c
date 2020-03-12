@@ -33,8 +33,7 @@
 #include "file.h"
 #include "mime.h"
 #include "cache.h"
-#include "setup.h"
-#include "page_cache.h"
+
 #define PORT "3490"  // the port users will be connecting to
 
 #define SERVER_FILES "./serverfiles"
@@ -49,8 +48,6 @@
  *
  * Return the value from the send() function.
  */
-struct file_pages *paper1 = NULL;
-struct page_cache *p_cache = NULL;
 int send_response(int fd, char *header, char *content_type, void *body, int content_length)
 {
     const int max_response_size = 262144;
@@ -85,6 +82,21 @@ int send_response(int fd, char *header, char *content_type, void *body, int cont
 
 
 /**
+ * Send a /d20 endpoint response
+ */
+void get_d20(int fd)
+{
+    // Generate a random number between 1 and 20 inclusive
+    fprintf(stdout,"Generating random  number ...");
+    int random_number = rand() % 20 + 1;
+    char number_string[255];
+    int string_length;
+
+    string_length = sprintf(number_string, "%d", random_number);
+    send_response(fd, "HTTP/1.1 OK", "text/plain", number_string, string_length);
+}
+
+/**
  * Send a 404 response
  */
 void resp_404(int fd)
@@ -110,6 +122,32 @@ void resp_404(int fd)
     file_free(filedata);
 }
 
+/**
+ * Send a cat response
+ */
+void get_cat(int fd)
+{
+    char filepath[4096];
+    struct file_data *filedata;
+    char *mime_type;
+
+    // Fetch the cat.jpeg file
+    snprintf(filepath, sizeof filepath, "%s/cat.jpg", SERVER_ROOT);
+    filedata = file_load(filepath);
+
+    if (filedata == NULL)
+    {
+        // TODO: make this non-fatal
+        fprintf(stderr, "cannot find cat file\n");
+        exit(3);
+    }
+
+    mime_type = mime_type_get(filepath);
+
+    send_response(fd, "HTTP/1.1 200 FOUND", mime_type, filedata->data, filedata->size);
+
+    file_free(filedata);
+}
 
 /**
  * Read and return a file from disk or cache
@@ -121,9 +159,9 @@ void get_file(int fd, struct cache *cache, char *request_path)
     char *mime_type;
 
     snprintf(filepath, sizeof filepath, "%s%s", SERVER_ROOT, request_path);
-    filedata = file_load(paper1);
+    filedata = file_load(filepath);
 
-    //fprintf(stdout,"f path ", filepath);
+    printf("%s\n", filepath);
 
     if (filedata == NULL) {
         fprintf(stderr, "cannot find file\n");
@@ -185,7 +223,10 @@ void handle_http_request(int fd, struct cache *cache)
     if(strstr(tempPath,"index"))
         strncpy(path,tempPath, 8192);
     fprintf(stdout,"parsed into ", path);*/
-    if (strcmp("GET", method) == 0) {
+    if (strcmp("/d20", path) == 0) {
+        get_d20(fd);
+    }
+    else if (strcmp("GET", method) == 0) {
         get_file(fd, cache, path);
     }
     else if (strcmp("POST", method) == 0) {
@@ -208,17 +249,7 @@ int main(void)
     int newfd;  // listen on sock_fd, new connection on newfd
     struct sockaddr_storage their_addr; // connector's address information
     char s[INET6_ADDRSTRLEN];
-    paper1 = setup("serverroot/hello.txt");
-    p_cache = setup_cache(paper1->first_page);
-    p_cache->cache_size = 50;
-    printf("Pages loaded as follows:\n");
-    struct page *p1_pages = paper1->first_page;
-    int i=1;
-    while(p1_pages!=NULL) {
-      printf("Page %d content= %s\n",i,p1_pages->content);
-      i++;
-      p1_pages = p1_pages->next_page;
-    }
+
     // random randomizing seeding
     srand(time(NULL));
 
