@@ -18,17 +18,17 @@ void prefetch(struct page* curr_page, int N) {
       break;
   }
 }
-
+/**
 void freadd(void *ptr, struct file_pages* fpgs) {
   printf("in fread\n");
   struct page *curr_pg = fpgs->first_page;
   int number = fpgs->no_of_pages;
   int pg_size = fpgs->page_size;
   int N=3;
-  int b;
+  int flag;
   while(number>0) {
-    b = is_in_cache(curr_pg);
-    if(b) {
+    flag = is_in_cache(curr_pg);
+    if(flag) {
       if(2*N < 32)
         N=2*N;
       else
@@ -40,9 +40,27 @@ void freadd(void *ptr, struct file_pages* fpgs) {
     memcpy(ptr,curr_pg->content,pg_size+1);
     //printf("post mcp\n");
     ptr+=pg_size+1;
-    printf("upar problem %d\n",N);
+    //printf("upar problem %d\n",N);
     prefetch(curr_pg,N);
     number-=1;
     curr_pg = curr_pg->next_page;
   }
 }
+*/
+void replacement(int which, struct file_page* pge, int pages)
+{
+    if(which==1)
+    {
+        //call LRU
+        LRU(pge,pages);
+    }
+    if(which==2)
+    {
+        //call 2Q
+        f2Q(pge,pages);
+    }
+    
+    
+}
+
+
