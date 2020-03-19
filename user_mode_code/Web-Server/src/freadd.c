@@ -18,12 +18,13 @@ void prefetch(struct page* curr_page, int N) {
       break;
   }
 }
-void freadd(void *ptr, struct file_pages* fpgs, int type) {
+bool freadd(void *ptr, struct file_pages* fpgs, int type) {
+   
     struct page *curr_pg = fpgs->first_page;
     int number = fpgs->no_of_pages;
     int pg_size = fpgs->page_size;
     int N=3;
-    replacement(type,*curr_pg,N)
+    check=replacement(type,*curr_pg,N);
     //replacement(2,*curr_pg,N)
     //replacement(3,*curr_pg,N)
     //replacement(4,*curr_pg,N)
@@ -34,7 +35,7 @@ void freadd(void *ptr, struct file_pages* fpgs, int type) {
     prefetch(curr_pg,N);
     number-=1;
     curr_pg = curr_pg->next_page;
-    
+    return check;
 }
 /**
 void freadd(void *ptr, struct file_pages* fpgs) {
@@ -65,7 +66,7 @@ void freadd(void *ptr, struct file_pages* fpgs) {
   }
 }
 */
-void LRU(struct file_page* *pge, int pages)
+bool LRU(struct file_page* *pge, int pages)
 {
     // check if the page is in the page cache
     int isin= is_in_cache(*pge);
@@ -74,13 +75,14 @@ void LRU(struct file_page* *pge, int pages)
     if(isin==1){
         remove_from_cache(*pge);
         put_in_cache(*pge);
+        return true;
     }
     else{
         put_in_cache(*pge);
+        return false;
     }
 }
-
-void f2Q(struct file_page* *pge, int pages)
+bool f2Q(struct file_page* *pge, int pages)
 {
     // check if the page is in the page cache
     int isin= is_in_cache(*pge);
@@ -88,6 +90,7 @@ void f2Q(struct file_page* *pge, int pages)
     if(isin==1){
         remove_from_cache(*pge);
         put_in_cache(*pge);
+        return true;
     }
     else{
         int isin2= is_in_sec_cache(*pge);
@@ -95,9 +98,11 @@ void f2Q(struct file_page* *pge, int pages)
         {
             remove_from_sec_cache(*pge);
             put_in_cache(*pge);
+            return true;
         }
         else{
             put_in_sec_cache(*pge);
+            return false;
         }
     }
     // if no, check if page is in the secondary cache,
@@ -105,7 +110,7 @@ void f2Q(struct file_page* *pge, int pages)
             //  if doesnt, add page to the secondary cache.
 }
 
-void ARC(struct file_page* *pge, int pages)
+bool ARC(struct file_page* *pge, int pages)
 { int p;
     p=0;
     int c=ghost1_cache->cache_size + ghost2_cache->cache_size + sec_cache->cache_size +p_cache->cache_size ;
@@ -119,11 +124,14 @@ void ARC(struct file_page* *pge, int pages)
     {
         if(isin1==1){
             remove_from_cache(*pge);
+            
         }
         else{
             remove_from_sec_cache(*pge);
         }
         put_in_cache(*cur);
+
+        return true;
     }
     else if(ising1==1){
         
@@ -133,6 +141,8 @@ void ARC(struct file_page* *pge, int pages)
         replace(p);
         remove_from_ghost1_cache(*pge);
         put_in_sec_cache(*cur);
+
+        return true;
     }
     
     else if(ising2==1){
@@ -142,6 +152,8 @@ void ARC(struct file_page* *pge, int pages)
                replace(p);
                remove_from_ghost1_cache(*pge);
                put_in_sec_cache(*cur);
+
+        return true;
     }
     
     else{
@@ -157,6 +169,7 @@ void ARC(struct file_page* *pge, int pages)
                 replace(p);
             }
         }
+        return false;
     }
     
 }
@@ -179,14 +192,18 @@ void replacement(int which, struct file_page* *pge, int pages)
     if(which==1)
     {
         //call LRU
-        LRU(pge,pages);
+        return LRU(pge,pages);
     }
     if(which==2)
     {
         //call 2Q
-        f2Q(pge,pages);
+        return f2Q(pge,pages);
     }
-    
+    if(which==3)
+       {
+           //call 2Q
+           return ARC(pge,pages);
+       }
     
 }
 
