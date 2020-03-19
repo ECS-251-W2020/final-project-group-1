@@ -2,6 +2,6 @@
 #define _FREAD_H_
 void prefetch(struct page* curr_page, int N);
 
-void freadd(void *ptr, struct file_pages* fpgs);
+void freadd(void *ptr, struct file_pages* fpgs, int type);
 
 #endif

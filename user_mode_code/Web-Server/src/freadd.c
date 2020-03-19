@@ -18,12 +18,12 @@ void prefetch(struct page* curr_page, int N) {
       break;
   }
 }
-void freadd(void *ptr, struct file_pages* fpgs) {
+void freadd(void *ptr, struct file_pages* fpgs, int type) {
     struct page *curr_pg = fpgs->first_page;
     int number = fpgs->no_of_pages;
     int pg_size = fpgs->page_size;
     int N=3;
-    replacement(1,*curr_pg,N)
+    replacement(type,*curr_pg,N)
     //replacement(2,*curr_pg,N)
     //replacement(3,*curr_pg,N)
     //replacement(4,*curr_pg,N)

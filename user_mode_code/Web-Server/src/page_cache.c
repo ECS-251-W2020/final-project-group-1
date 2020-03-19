@@ -300,7 +300,7 @@ struct sec_cache* setup_sec_cache(struct page *pge) {
   return sec_c;
 }
 
-struct sec_cache* setup_ghost1_cache(struct page *pge) {
+struct ghost1_cache* setup_ghost1_cache(struct page *pge) {
   struct ghost1_cache_entry *entr = (struct ghost2_cache_entry*) malloc(sizeof(struct ghost1_cache_entry));
   struct page_cache *ghost1_c = (struct ghost1_cache*) malloc(sizeof(struct ghost1_cache));
   entr->curr_page = pge;
@@ -310,7 +310,7 @@ struct sec_cache* setup_ghost1_cache(struct page *pge) {
   sec_c->cache_size = 20;
   return sec_c;
 }
-struct sec_cache* setup_ghost2_cache(struct page *pge) {
+struct ghost2_cache* setup_ghost2_cache(struct page *pge) {
   struct ghost2_cache_entry *entr = (struct ghost2_cache_entry*) malloc(sizeof(struct ghost2_cache_entry));
   struct page_cache *ghost2_c = (struct ghost2_cache*) malloc(sizeof(struct ghost2_cache));
   entr->curr_page = pge;
