@@ -64,6 +64,15 @@ void remove_from_sec_cache(struct page *pge);
 void remove_from_ghost1_cache(struct page *pge);
 void remove_from_ghost2_cache(struct page *pge);
 
+
+void getlast_from_cache(struct page *pge);
+void getlast_from_sec_cache(struct page *pge);
+
+void removelast_from_cache(struct page *pge);
+void removelast_from_sec_cache(struct page *pge);
+void removelast_from_ghost1_cache(struct page *pge);
+void removelast_from_ghost2_cache(struct page *pge);
+
 struct page_cache* setup_cache(struct page *pge);
 struct page_cache* setup_sec_cache(struct page *pge);
 struct page_cache* setup_ghost1_cache(struct page *pge);

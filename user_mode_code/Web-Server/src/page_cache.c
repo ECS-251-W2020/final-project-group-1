@@ -17,7 +17,74 @@ int is_in_cache(struct page *pge) {
   //}
   return 0;
 }
-
+void removelast_from_cache()
+{
+    //remove last element.
+    struct p_cache_entry *c_entry = p_cache->first_entry;
+    while(c_entry!=NULL) {
+      if(c_entry->next_entry->next_entry == NULL){
+          c_entry->next_entry=NULL;
+          p_cache->no_of_entries--;
+      }
+    }
+    put_in_cache(*pge);
+}
+struct page* getlast_from_cache()
+{
+    //remove last element.
+    struct p_cache_entry *c_entry = p_cache->first_entry;
+    while(c_entry!=NULL) {
+      if(c_entry->next_entry == NULL){
+          return *c_entry;
+      }
+    }
+}
+struct page* getlast_from_sec_cache()
+{
+    //remove last element.
+    struct sec_cache_entry *c_entry = sec_cache->first_entry;
+    while(c_entry!=NULL) {
+      if(c_entry->next_entry == NULL){
+          return *c_entry;
+      }
+    }
+}
+void removelast_from_sec_cache()
+{
+    //remove last element.
+    struct sec_cache_entry *c_entry = sec_cache->first_entry;
+    while(c_entry!=NULL) {
+      if(c_entry->next_entry->next_entry == NULL){
+          c_entry->next_entry=NULL;
+          p_cache->no_of_entries--;
+      }
+    }
+    put_in_cache(*pge);
+}
+void removelast_from_ghost2_cache()
+{
+    //remove last element.
+    struct ghost2_cache_entry *c_entry = ghost2_cache->first_entry;
+    while(c_entry!=NULL) {
+      if(c_entry->next_entry->next_entry == NULL){
+          c_entry->next_entry=NULL;
+          p_cache->no_of_entries--;
+      }
+    }
+    put_in_cache(*pge);
+}
+void removelast_from_ghost1_cache()
+{
+    //remove last element.
+    struct ghost1_cache_entry *c_entry = ghost1_cache->first_entry;
+    while(c_entry!=NULL) {
+      if(c_entry->next_entry->next_entry == NULL){
+          c_entry->next_entry=NULL;
+          p_cache->no_of_entries--;
+      }
+    }
+    put_in_cache(*pge);
+}
 int is_in_sec_cache(struct page *pge) {
 
     struct sec_cache_entry *c_entry = sec_cache->first_entry;
@@ -72,15 +139,7 @@ void put_in_cache(struct page *pge) {
       temp->next_entry = c_entry;
       p_cache->no_of_entries+=1;
     } else {
-        //remove last element.
-        struct p_cache_entry *c_entry = p_cache->first_entry;
-        while(c_entry!=NULL) {
-          if(c_entry->next_entry->next_entry == NULL){
-              c_entry->next_entry=NULL;
-              p_cache->no_of_entries--;
-          }
-        }
-        put_in_cache(*pge);
+        removelast_from_cache();
     }
 }
 

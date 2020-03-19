@@ -106,10 +106,74 @@ void f2Q(struct file_page* *pge, int pages)
 }
 
 void ARC(struct file_page* *pge, int pages)
-{
+{ int p;
+    p=0;
+    int c=ghost1_cache->cache_size + ghost2_cache->cache_size + sec_cache->cache_size +p_cache->cache_size ;
+    c=c/2;
+    struct page cur = pge;
+    int isin1=is_in_cache(*pge);
+    int isin2=is_in_sec_cache(*pge);
+    int ising1=is_in_ghost1_cache(*pge);
+    int ising2=is_in_ghost2_cache(*pge);
+    if (isin1+isin2 > 0)
+    {
+        if(isin1==1){
+            remove_from_cache(*pge);
+        }
+        else{
+            remove_from_sec_cache(*pge);
+        }
+        put_in_cache(*cur);
+    }
+    else if(ising1==1){
+        
+        float check_max = ghost2_cache->no_of_entries / ghost1_cache->no_of_entries;
+        float check1=p+ (checkmax > 1 ? checkmax: 1);
+        p= check1 > c?c:check1;
+        replace(p);
+        remove_from_ghost1_cache(*pge);
+        put_in_sec_cache(*cur);
+    }
+    
+    else if(ising2==1){
+         float check_max = ghost1_cache->no_of_entries / ghost2_cache->no_of_entries;
+               float check1=p-  (checkmax > 1 ? checkmax: 1);
+        p= check1 > 0 ? check1:0;
+               replace(p);
+               remove_from_ghost1_cache(*pge);
+               put_in_sec_cache(*cur);
+    }
+    
+    else{
+        if (ghost1_cache->no_of_entries +p_cache->no_of_entries== c){
+            if(p_cache->no_of_entries < c){ removelast_from_ghost1_cache();
+                replace(p);}
+            else{
+                removelast_from_cache();
+            }
+        }
+        else if ( (ghost1_cache->no_of_entries +p_cache->no_of_entries <c) && (ghost1_cache->no_of_entries + ghost2_cache->no_of_entries + sec_cache->no_of_entries +p_cache->no_of_entries ) >=c){
+            if(ghost1_cache->no_of_entries + ghost2_cache->no_of_entries + sec_cache->no_of_entries +p_cache->no_of_entries ==2c) {removelast_from_ghost2_cache();
+                replace(p);
+            }
+        }
+    }
     
 }
-
+void replace(float p)
+{
+    if ( p_cache->no_of_entries >=1) && ( ( p_cache->no_of_entries >= p )   ) {
+        struct page *pge=getlast_from_cache();
+        removelast_from_cache();
+        put_in_ghost1_cache(pge);
+        
+    }
+    else{
+        struct page *pge=getlast_from_sec_cache();
+        removelast_from_sec_cache();
+        put_in_ghost2_cache(pge);
+    }
+}
 void replacement(int which, struct file_page* *pge, int pages)
 {
     if(which==1)
