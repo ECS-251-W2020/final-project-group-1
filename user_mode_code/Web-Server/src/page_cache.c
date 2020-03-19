@@ -45,7 +45,15 @@ void put_in_cache(struct page *pge) {
       temp->next_entry = c_entry;
       p_cache->no_of_entries+=1;
     } else {
-      //call to cache replacement algorithm
+        //remove last element.
+        struct p_cache_entry *c_entry = p_cache->first_entry;
+        while(c_entry!=NULL) {
+          if(c_entry->next_entry->next_entry == NULL){
+              c_entry->next_entry=NULL;
+              p_cache->no_of_entries--;
+          }
+        }
+        put_in_cache(*pge);
     }
 }
 
@@ -63,17 +71,49 @@ void put_in_sec_cache(struct page *pge) {
       temp->next_entry = c_entry;
       sec_cache->no_of_entries+=1;
     } else {
-      //call to cache replacement algorithm
-    }
+            //remove last element.
+            struct sec_cache_entry *c_entry = sec_cache->first_entry;
+            while(c_entry!=NULL) {
+              if(c_entry->next_entry->next_entry == NULL){
+                  c_entry->next_entry=NULL;
+                  p_cache->no_of_entries--;
+              }
+            }
+            put_in_cache(*pge);
+        }
 }
 
 
 void remove_from_cache(struct page *pge) {
+    
+    struct p_cache_entry *c_entry = p_cache->first_entry;
+      while(c_entry!=NULL) {
+        if(c_entry->curr_page == pge){
+            //remove the page.
+            c_entry= c_entry->next_page;
+        }
+        c_entry = c_entry->next_entry;
+      }
+    //}
+    return 0;
 
+    
   }
 
-void remove_from_sec_cache(struct page *pge) {
 
+  
+
+void remove_from_sec_cache(struct page *pge) {
+    struct sec_cache_entry *c_entry = sec_cache->first_entry;
+      while(c_entry!=NULL) {
+        if(c_entry->curr_page == pge){
+            //remove the page.
+            sec
+        }
+        c_entry = c_entry->next_entry;
+      }
+    //}
+    return 0;
 }
 struct page_cache* setup_cache(struct page *pge) {
   struct p_cache_entry *entr = (struct p_cache_entry*) malloc(sizeof(struct p_cache_entry));

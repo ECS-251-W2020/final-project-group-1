@@ -51,6 +51,8 @@
  */
 struct file_pages *paper1 = NULL;
 struct page_cache *p_cache = NULL;
+struct file_pages *secp1 = NULL;
+struct page_cache *sec_cache = NULL;
 int send_response(int fd, char *header, char *content_type, void *body, int content_length)
 {
     const int max_response_size = 262144;
@@ -209,6 +211,12 @@ int main(void)
     struct sockaddr_storage their_addr; // connector's address information
     char s[INET6_ADDRSTRLEN];
     paper1 = setup("serverroot/hello.txt");
+    // if replacement algorithm is Q2
+    secp1= paper1
+    paper1=setup_prim()
+    sec_cache = setup_sec_cache(secp1->first_page);
+    // setup q2 done.
+    
     p_cache = setup_cache(paper1->first_page);
     p_cache->cache_size = 50;
     printf("Pages loaded as follows:\n");

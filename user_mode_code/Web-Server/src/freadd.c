@@ -18,6 +18,24 @@ void prefetch(struct page* curr_page, int N) {
       break;
   }
 }
+void freadd(void *ptr, struct file_pages* fpgs) {
+    struct page *curr_pg = fpgs->first_page;
+    int number = fpgs->no_of_pages;
+    int pg_size = fpgs->page_size;
+    int N=3;
+    replacement(1,*curr_pg,N)
+    //replacement(2,*curr_pg,N)
+    //replacement(3,*curr_pg,N)
+    //replacement(4,*curr_pg,N)
+    memcpy(ptr,curr_pg->content,pg_size+1);
+    //printf("post mcp\n");
+    ptr+=pg_size+1;
+    //printf("upar problem %d\n",N);
+    prefetch(curr_pg,N);
+    number-=1;
+    curr_pg = curr_pg->next_page;
+    
+}
 /**
 void freadd(void *ptr, struct file_pages* fpgs) {
   printf("in fread\n");
@@ -47,7 +65,52 @@ void freadd(void *ptr, struct file_pages* fpgs) {
   }
 }
 */
-void replacement(int which, struct file_page* pge, int pages)
+void LRU(struct file_page* *pge, int pages)
+{
+    // check if the page is in the page cache
+    int isin= is_in_cache(*pge);
+    // if yes return the page, delete from the queue and add it again.
+    // if no, add the page to the queue.
+    if(isin==1){
+        remove_from_cache(*pge);
+        put_in_cache(*pge);
+    }
+    else{
+        put_in_cache(*pge);
+    }
+}
+
+void f2Q(struct file_page* *pge, int pages)
+{
+    // check if the page is in the page cache
+    int isin= is_in_cache(*pge);
+    // if yes return the page, delete from the queue and add it again.
+    if(isin==1){
+        remove_from_cache(*pge);
+        put_in_cache(*pge);
+    }
+    else{
+        int isin2= is_in_sec_cache(*pge);
+        if(isin2==1)
+        {
+            remove_from_sec_cache(*pge);
+            put_in_cache(*pge);
+        }
+        else{
+            put_in_sec_cache(*pge);
+        }
+    }
+    // if no, check if page is in the secondary cache,
+            //  if exists, delete from secondary cache and add to primary cache
+            //  if doesnt, add page to the secondary cache.
+}
+
+void ARC(struct file_page* *pge, int pages)
+{
+    
+}
+
+void replacement(int which, struct file_page* *pge, int pages)
 {
     if(which==1)
     {
