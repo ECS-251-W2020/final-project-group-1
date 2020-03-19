@@ -51,6 +51,10 @@
  */
 struct file_pages *paper1 = NULL;
 struct page_cache *p_cache = NULL;
+struct file_pages *secp1 = NULL;
+struct page_cache *sec_cache = NULL;
+struct page_cache *ghost1_cache = NULL;
+struct page_cache *ghost2_cache = NULL;
 int send_response(int fd, char *header, char *content_type, void *body, int content_length)
 {
     const int max_response_size = 262144;
@@ -208,7 +212,25 @@ int main(void)
     int newfd;  // listen on sock_fd, new connection on newfd
     struct sockaddr_storage their_addr; // connector's address information
     char s[INET6_ADDRSTRLEN];
+    int type=1; //change type for change in replacement algorithm
     paper1 = setup("serverroot/hello.txt");
+    // if replacement algorithm is Q2
+    if(type==2){
+    secp1= paper1
+    paper1=setup_prim()
+    sec_cache = setup_sec_cache(secp1->first_page);
+    // setup q2 done.
+    }
+    else if(type==3)
+    {
+        secp1= paper1
+        paper1=setup_prim()
+        sec_cache = setup_sec_cache(secp1->first_page);
+        ghost1_cache = setup_sec_cache(secp1->first_page);
+        ghost2_cache = setup_sec_cache(secp1->first_page);
+    }
+    
+    
     p_cache = setup_cache(paper1->first_page);
     p_cache->cache_size = 50;
     printf("Pages loaded as follows:\n");

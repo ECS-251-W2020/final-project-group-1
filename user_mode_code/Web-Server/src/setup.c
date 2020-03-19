@@ -8,8 +8,7 @@ struct file_pages* setup(char *filename) {
   fip = fopen(filename,"r");
   char pg_content[21];
   fread(pg_content,1,21,fip);
-  //fseek(fp,0,SEEK_CUR);
-  //printf("%s\n",pg_content);
+    
   struct page *first_page = (struct page*) malloc(sizeof(struct page));
   struct file_pages* file_pages = (struct file_pages*) malloc(sizeof(struct file_pages));
   memcpy(first_page->content,pg_content,strlen(pg_content)+1);
@@ -35,5 +34,23 @@ struct file_pages* setup(char *filename) {
 
   printf("Setup done\n");
   fclose(fip);
+  return file_pages;
+}
+
+struct file_pages* setup_prim() {
+  struct page *first_page = (struct page*) malloc(sizeof(struct page));
+  struct file_pages* file_pages = (struct file_pages*) malloc(sizeof(struct file_pages));
+  memcpy(first_page->content,"",1);
+  first_page->next_page = NULL;
+  struct page* curr_page = first_page;
+  int no_of_pages = 0;
+
+  file_pages->first_page = first_page;
+  file_pages->no_of_pages = no_of_pages;
+  file_pages->page_size = 20;
+  file_pages->fp = fip;
+
+  printf("Primary setup done\n");
+
   return file_pages;
 }
